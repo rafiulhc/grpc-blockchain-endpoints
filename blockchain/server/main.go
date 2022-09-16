@@ -6,6 +6,7 @@ import (
 
 	pb "github.com/rafiulhc/grpc-blockchain-endpoints/blockchain/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 var addr string = "0.0.0.0:50051"
@@ -24,6 +25,7 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterBlockServiceServer(s, &Server{})
+	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
