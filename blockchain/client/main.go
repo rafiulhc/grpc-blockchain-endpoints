@@ -20,11 +20,10 @@ func main() {
 
 	defer conn.Close()
 
-	client := pb.NewBlockServiceClient(conn)
+	client := pb.NewGetLatestBlockServiceClient(conn)
 
 	CallBlock(client)
 	// DoGreetManyTimes(client, "Rafiul")
 	// DoLongGreet(client)
 	//DoGreetEveryone(client)
-
 }

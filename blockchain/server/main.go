@@ -12,7 +12,7 @@ import (
 var addr string = "0.0.0.0:50051"
 
 type Server struct{
-	pb.BlockServiceServer
+	pb.GetLatestBlockServiceServer
 }
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 	log.Printf("Server is listening on %s\n", addr)
 
 	s := grpc.NewServer()
-	pb.RegisterBlockServiceServer(s, &Server{})
+	pb.RegisterGetLatestBlockServiceServer(s, &Server{})
 	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
