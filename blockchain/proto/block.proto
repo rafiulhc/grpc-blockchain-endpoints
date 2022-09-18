@@ -7,7 +7,7 @@ option go_package = "github.com/rafiulhc/grpc-blockchain-endpoints/blockchain/pr
 message GetLatestBlockRequest {}
 
 message GetLatestBlockResponse {
-    int32 block_id = 1;
+    string block_id = 1;
     string block = 2;
 }
 

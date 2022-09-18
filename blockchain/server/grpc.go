@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,13 +12,29 @@ import (
 	pb "github.com/rafiulhc/grpc-blockchain-endpoints/blockchain/proto"
 )
 
+type Response struct {
+    JSONRPC      string `json:"jsonrpc"`
+    ID           int `json:"id"`
+    Result       struct {
+		Response   struct {
+			Data string `json:"data"`
+			Version string `json:"version"`
+			AppVersion string 		`json:"app_version"`
+			LastBlockHeight string `json:"last_block_height"`
+			LastBlockAppHash string `json:"last_block_app_hash"`
+		  } `json:"response"`
+    } `json:"result"`
+}
+
+
+
+
+
 
 func (s *Server) Block(req *pb.GetLatestBlockRequest, stream pb.GetLatestBlockService_BlockServer) error{
 		println("Block stream called")
 
-
-
-		for i:=0; i<10; i++{
+		for i:=0; i<5; i++{
 			response, err := http.Get("https://rpc.osmosis.zone/abci_info?")
 
 			if err != nil {
@@ -25,15 +42,25 @@ func (s *Server) Block(req *pb.GetLatestBlockRequest, stream pb.GetLatestBlockSe
 				os.Exit(1)
 			}
 
-			responseData, err := ioutil.ReadAll(response.Body)
+
+			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {
 				log.Fatal(err)
 			}
-			res := &pb.GetLatestBlockResponse{
-				BlockId: int32(i),
-				Block:  string(responseData),
+
+			var responseObject Response
+
+			if err := json.Unmarshal(body, &responseObject); err != nil {   // Parse []byte to go struct pointer
+				fmt.Println("Can not unmarshal JSON")
 			}
+
+			res := &pb.GetLatestBlockResponse{
+				BlockId: responseObject.Result.Response.LastBlockHeight,
+				Block:  responseObject.Result.Response.LastBlockAppHash,
+			}
+
 			stream.Send(res)
+
 			time.Sleep(6 * time.Second)
 		}
 		return nil
