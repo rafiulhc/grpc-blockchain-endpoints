@@ -6,19 +6,34 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
 
 	pb "github.com/rafiulhc/grpc-blockchain-endpoints/blockchain/proto"
+	"github.com/sirupsen/logrus"
 )
 
 
 
 type Block struct {
-	BlockId string
-	Block string
+	Height string `json:"height"`
+	Hash string   `json:"hash"`
+}
+func checkFile(filename string) error {
+    _, err := os.Stat(filename)
+    if os.IsNotExist(err) {
+        _, err := os.Create(filename)
+        if err != nil {
+            return err
+        }
+    }
+    return nil
 }
 
 
-	func CallBlock(client pb.GetLatestBlockServiceClient) {
+
+func CallBlock(client pb.GetLatestBlockServiceClient) {
+
+
 		println("callBlock client called")
 		stream, err := client.Block(context.Background(), &pb.GetLatestBlockRequest{})
 		if err != nil {
@@ -34,16 +49,40 @@ type Block struct {
 				log.Fatalf("Error while reading stream: %v", err)
 			}
 
-			data := &Block{
-				BlockId: res.BlockId,
-				Block: res.Block,
+			filename := "state.json"
+			err = checkFile(filename)
+			if err != nil {
+				logrus.Error(err)
 			}
 
-			file, _ := json.MarshalIndent(data, "", " ")
+			file, err := ioutil.ReadFile(filename)
+			if err != nil {
+				logrus.Error(err)
+			}
 
-			_ = ioutil.WriteFile("state.json", file, 0644)
-			log.Printf("Response from Block: %v", data)
-		}
+			dataBlock := &Block{
+				Height: res.BlockId,
+				Hash: res.Block,
+			}
+
+			data := []Block{}
+
+			// Here the magic happens!
+			json.Unmarshal(file, &data)
+
+			data = append(data, *dataBlock)
+
+			// Preparing the data to be marshalled and written.
+			dataBytes, err := json.Marshal(data)
+			if err != nil {
+				logrus.Error(err)
+			}
+
+			err = ioutil.WriteFile(filename, dataBytes, 0644)
+			if err != nil {
+				logrus.Error(err)
+			}
+			log.Printf("Response from Block: %v", dataBlock)
 	}
 
-
+}
