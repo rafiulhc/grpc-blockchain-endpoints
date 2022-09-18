@@ -12,5 +12,5 @@ message GetLatestBlockResponse {
 }
 
 service GetLatestBlockService {
-    rpc Block (GetLatestBlockRequest) returns (GetLatestBlockResponse);
+    rpc Block (GetLatestBlockRequest) returns (stream GetLatestBlockResponse);
 }

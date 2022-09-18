@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GetLatestBlockServiceClient interface {
-	Block(ctx context.Context, in *GetLatestBlockRequest, opts ...grpc.CallOption) (*GetLatestBlockResponse, error)
+	Block(ctx context.Context, in *GetLatestBlockRequest, opts ...grpc.CallOption) (GetLatestBlockService_BlockClient, error)
 }
 
 type getLatestBlockServiceClient struct {
@@ -33,20 +33,43 @@ func NewGetLatestBlockServiceClient(cc grpc.ClientConnInterface) GetLatestBlockS
 	return &getLatestBlockServiceClient{cc}
 }
 
-func (c *getLatestBlockServiceClient) Block(ctx context.Context, in *GetLatestBlockRequest, opts ...grpc.CallOption) (*GetLatestBlockResponse, error) {
-	out := new(GetLatestBlockResponse)
-	err := c.cc.Invoke(ctx, "/blockchain.GetLatestBlockService/Block", in, out, opts...)
+func (c *getLatestBlockServiceClient) Block(ctx context.Context, in *GetLatestBlockRequest, opts ...grpc.CallOption) (GetLatestBlockService_BlockClient, error) {
+	stream, err := c.cc.NewStream(ctx, &GetLatestBlockService_ServiceDesc.Streams[0], "/blockchain.GetLatestBlockService/Block", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &getLatestBlockServiceBlockClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type GetLatestBlockService_BlockClient interface {
+	Recv() (*GetLatestBlockResponse, error)
+	grpc.ClientStream
+}
+
+type getLatestBlockServiceBlockClient struct {
+	grpc.ClientStream
+}
+
+func (x *getLatestBlockServiceBlockClient) Recv() (*GetLatestBlockResponse, error) {
+	m := new(GetLatestBlockResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // GetLatestBlockServiceServer is the server API for GetLatestBlockService service.
 // All implementations must embed UnimplementedGetLatestBlockServiceServer
 // for forward compatibility
 type GetLatestBlockServiceServer interface {
-	Block(context.Context, *GetLatestBlockRequest) (*GetLatestBlockResponse, error)
+	Block(*GetLatestBlockRequest, GetLatestBlockService_BlockServer) error
 	mustEmbedUnimplementedGetLatestBlockServiceServer()
 }
 
@@ -54,8 +77,8 @@ type GetLatestBlockServiceServer interface {
 type UnimplementedGetLatestBlockServiceServer struct {
 }
 
-func (UnimplementedGetLatestBlockServiceServer) Block(context.Context, *GetLatestBlockRequest) (*GetLatestBlockResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Block not implemented")
+func (UnimplementedGetLatestBlockServiceServer) Block(*GetLatestBlockRequest, GetLatestBlockService_BlockServer) error {
+	return status.Errorf(codes.Unimplemented, "method Block not implemented")
 }
 func (UnimplementedGetLatestBlockServiceServer) mustEmbedUnimplementedGetLatestBlockServiceServer() {}
 
@@ -70,22 +93,25 @@ func RegisterGetLatestBlockServiceServer(s grpc.ServiceRegistrar, srv GetLatestB
 	s.RegisterService(&GetLatestBlockService_ServiceDesc, srv)
 }
 
-func _GetLatestBlockService_Block_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLatestBlockRequest)
-	if err := dec(in); err != nil {
-		return nil, err
+func _GetLatestBlockService_Block_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetLatestBlockRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(GetLatestBlockServiceServer).Block(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/blockchain.GetLatestBlockService/Block",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GetLatestBlockServiceServer).Block(ctx, req.(*GetLatestBlockRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(GetLatestBlockServiceServer).Block(m, &getLatestBlockServiceBlockServer{stream})
+}
+
+type GetLatestBlockService_BlockServer interface {
+	Send(*GetLatestBlockResponse) error
+	grpc.ServerStream
+}
+
+type getLatestBlockServiceBlockServer struct {
+	grpc.ServerStream
+}
+
+func (x *getLatestBlockServiceBlockServer) Send(m *GetLatestBlockResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // GetLatestBlockService_ServiceDesc is the grpc.ServiceDesc for GetLatestBlockService service.
@@ -94,12 +120,13 @@ func _GetLatestBlockService_Block_Handler(srv interface{}, ctx context.Context, 
 var GetLatestBlockService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "blockchain.GetLatestBlockService",
 	HandlerType: (*GetLatestBlockServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "Block",
-			Handler:    _GetLatestBlockService_Block_Handler,
+			StreamName:    "Block",
+			Handler:       _GetLatestBlockService_Block_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "block.proto",
 }

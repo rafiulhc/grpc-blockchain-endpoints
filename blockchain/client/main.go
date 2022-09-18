@@ -23,6 +23,7 @@ func main() {
 	client := pb.NewGetLatestBlockServiceClient(conn)
 
 	CallBlock(client)
+	// callRpcEndpoint()
 	// DoGreetManyTimes(client, "Rafiul")
 	// DoLongGreet(client)
 	//DoGreetEveryone(client)
