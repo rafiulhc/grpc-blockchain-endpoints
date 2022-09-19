@@ -37,14 +37,13 @@ else
 endif
 
 .DEFAULT_GOAL := help
-.PHONY: blockchain blog calculator help
-project := blockchain calculator blog
+.PHONY: grpc help
+project := grpc
 
 all: $(project) ## Generate Pbs and build
 
-blockchain: $@ ## Generate Pbs and build for blockchain
-calculator: $@ ## Generate Pbs and build for calculator
-blog: $@ ## Generate Pbs and build for blog
+grpc: $@ ## Generate Pbs and build for grpc
+
 
 $(project):
 	@${CHECK_DIR_CMD}
@@ -55,21 +54,16 @@ $(project):
 test: all ## Launch tests
 	go test ./...
 
-clean: clean_blockchain clean_calculator clean_blog ## Clean generated files
+clean: clean_grpc ## Clean generated files
 	${RM_F_CMD} ssl/*.crt
 	${RM_F_CMD} ssl/*.csr
 	${RM_F_CMD} ssl/*.key
 	${RM_F_CMD} ssl/*.pem
 	${RM_RF_CMD} ${BIN_DIR}
 
-clean_blockchain: ## Clean generated files for blockchain
-	${RM_F_CMD} blockchain/${PROTO_DIR}/*.pb.go
+clean_grpc: ## Clean generated files for grpc
+	${RM_F_CMD} grpc/${PROTO_DIR}/*.pb.go
 
-clean_calculator: ## Clean generated files for calculator
-	${RM_F_CMD} calculator/${PROTO_DIR}/*.pb.go
-
-clean_blog: ## Clean generated files for blog
-	${RM_F_CMD} blog/${PROTO_DIR}/*.pb.go
 
 rebuild: clean all ## Rebuild the whole project
 

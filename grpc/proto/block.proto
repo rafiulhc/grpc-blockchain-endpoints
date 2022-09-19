@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "github.com/rafiulhc/grpc-blockchain-endpoints/grpc/proto";
+
+message GetLatestBlockRequest {}
+
+message GetLatestBlockResponse {
+    string block_id = 1;
+    string block = 2;
+}
+
+service GetLatestBlockService {
+    rpc GetLatestBlock (GetLatestBlockRequest) returns (stream GetLatestBlockResponse);
+}

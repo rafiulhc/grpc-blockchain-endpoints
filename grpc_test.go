@@ -11,7 +11,7 @@ import (
 	"log"
 	"testing"
 
-	pb "github.com/rafiulhc/grpc-blockchain-endpoints/blockchain/proto"
+	pb "github.com/rafiulhc/grpc-blockchain-endpoints/grpc/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -92,7 +92,6 @@ func TestCallLatestBlock(t *testing.T){
 	}
 
 	responseBlockHashByBlockChainAPIRequest := responseObject.Result.Response.LastBlockAppHash
-
 
 	if responseBlockHashByGRPCRequest != responseBlockHashByBlockChainAPIRequest {
         t.Error("result doesn't match, got", responseBlockHashByBlockChainAPIRequest)
