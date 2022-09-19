@@ -18,6 +18,7 @@ type Block struct {
 	Height string `json:"height"`
 	Hash string   `json:"hash"`
 }
+
 func checkFile(filename string) error {
     _, err := os.Stat(filename)
     if os.IsNotExist(err) {
@@ -31,11 +32,10 @@ func checkFile(filename string) error {
 
 
 
-func CallBlock(client pb.GetLatestBlockServiceClient) {
-
+func CallLatestBlock(client pb.GetLatestBlockServiceClient) {
 
 		println("callBlock client called")
-		stream, err := client.Block(context.Background(), &pb.GetLatestBlockRequest{})
+		stream, err := client.GetLatestBlock(context.Background(), &pb.GetLatestBlockRequest{})
 		if err != nil {
 			log.Fatalf("Error while calling Block RPC: %v", err)
 		}

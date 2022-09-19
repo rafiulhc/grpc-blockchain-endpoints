@@ -13,29 +13,27 @@ import (
 )
 
 type Response struct {
-    JSONRPC      string `json:"jsonrpc"`
-    ID           int `json:"id"`
-    Result       struct {
+    JSONRPC       string `json:"jsonrpc"`
+    ID            int `json:"id"`
+    Result        struct {
 		Response   struct {
-			Data string `json:"data"`
-			Version string `json:"version"`
-			AppVersion string 		`json:"app_version"`
-			LastBlockHeight string `json:"last_block_height"`
+			Data             string `json:"data"`
+			Version          string `json:"version"`
+			AppVersion       string 		`json:"app_version"`
+			LastBlockHeight  string `json:"last_block_height"`
 			LastBlockAppHash string `json:"last_block_app_hash"`
 		  } `json:"response"`
     } `json:"result"`
 }
 
 
-
-
-
-
-func (s *Server) Block(req *pb.GetLatestBlockRequest, stream pb.GetLatestBlockService_BlockServer) error{
+func (s *Server) GetLatestBlock(req *pb.GetLatestBlockRequest, stream pb.GetLatestBlockService_GetLatestBlockServer) error{
 		println("Block stream called")
 
+		rpcURL := "https://rpc.osmosis.zone/abci_info?"
+
 		for i:=0; i<5; i++{
-			response, err := http.Get("https://rpc.osmosis.zone/abci_info?")
+			response, err := http.Get(rpcURL)
 
 			if err != nil {
 				fmt.Print(err.Error())
