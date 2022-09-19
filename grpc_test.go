@@ -6,18 +6,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	"log"
 	"testing"
 
 	pb "github.com/rafiulhc/grpc-blockchain-endpoints/grpc/proto"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure" // for simplicity, use insecure.NewCredentials() as a parameter in grpc.Dial(), for production use SSL cert
+	"google.golang.org/grpc/status"               // for error handling status
 )
 
 var addr string = "0.0.0.0:50051"
 
+// Response is the struct response from the blockchain API
 type Response struct {
     JSONRPC       string `json:"jsonrpc"`
     ID            int    `json:"id"`
@@ -33,66 +35,80 @@ type Response struct {
 }
 
 
+// newLatestBlock is a function that calls the GRPC server and returns the latest block for testing
+func newLatestBlock(client pb.GetLatestBlockServiceClient) (result *pb.GetLatestBlockResponse) {
 
-func newCallLatestBlock(client pb.GetLatestBlockServiceClient) (result *pb.GetLatestBlockResponse) {
-
-	println("callBlock client called")
+	// variable to store the response
 	stream, err := client.GetLatestBlock(context.Background(), &pb.GetLatestBlockRequest{})
 	if err != nil {
 		log.Fatalf("Error while calling Block RPC: %v", err)
 	}
 
-		res, err := stream.Recv()
+	// read the response from the stream
+	res, err := stream.Recv()
 
-		if err != nil {
-			log.Fatalf("Error while reading stream: %v", err)
-		}
+	if err != nil {
+			status.Error(
+				codes.Unknown,
+				fmt.Sprintf("failed to receive a block : %v", err),
+			)
+	}
 
-
-	println("callBlock client finished")
 	return res
 
 }
 
+// TestGetLatestBlock is a test function that tests the GRPC server response with the blockchain API response
 func TestCallLatestBlock(t *testing.T){
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
-		log.Fatalf("failed to connect: %v\n", err)
+		status.Error(
+			codes.Internal,
+			fmt.Sprintf("failed to connect: %v", err),
+		)
 	}
 
 	defer conn.Close()
 
 	client := pb.NewGetLatestBlockServiceClient(conn)
-	result  := newCallLatestBlock(client)
+	result  := newLatestBlock(client)
 	println(result.Block)
 
-	responseBlockHashByGRPCRequest := result.Block
-
-	println("Block stream called")
-
+	// Call the blockchain endpoint
 	rpcURL := "https://rpc.osmosis.zone/abci_info?"
 	response, err := http.Get(rpcURL)
 
 	if err != nil {
-		fmt.Print(err.Error())
-		os.Exit(1)
+		status.Error(
+			codes.NotFound,
+			fmt.Sprintf("Could not get latest block: %v", err),
+		)
 	}
 
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		status.Error(
+			codes.Internal,
+			fmt.Sprintf("Could not read response body: %v", err),
+		)
 	}
 
+	// Unmarshal the response body and store it in the Response struct
 	var responseObject Response
 
-	if err := json.Unmarshal(body, &responseObject); err != nil {   // Parse []byte to go struct pointer
-		fmt.Println("Can not unmarshal JSON")
+	if err := json.Unmarshal(body, &responseObject); err != nil {   // Parsed []byte to go struct pointer
+		status.Error(
+			codes.Internal,
+			fmt.Sprintf("Could not unmarshal response body: %v", err),
+		)
 	}
 
+	responseBlockHashByGRPCRequest := result.Block
 	responseBlockHashByBlockChainAPIRequest := responseObject.Result.Response.LastBlockAppHash
 
+	// check if the response from the blockchain API and the response from the GRPC request are the same
 	if responseBlockHashByGRPCRequest != responseBlockHashByBlockChainAPIRequest {
         t.Error("result doesn't match, got", responseBlockHashByBlockChainAPIRequest)
     }
