@@ -16,6 +16,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+var addr string = "0.0.0.0:50051"
+
 type Response struct {
     JSONRPC       string `json:"jsonrpc"`
     ID            int    `json:"id"`
