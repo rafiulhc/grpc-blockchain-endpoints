@@ -52,7 +52,7 @@ To get a local copy up and running follow these simple steps.
 
 
 
-## To get executable binaries
+## To get executable binaries, please open a terminal under project directory and run
 
 ```
   make grpc
