@@ -159,7 +159,8 @@ Change the secret variables as process.env.SECRET_KEY and process.env.ALCHEMY pr
 <!--Testing-->
 ## Testing
 
-  ```go test
+  ```
+  go test
   ```
 
 
