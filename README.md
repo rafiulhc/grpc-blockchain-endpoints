@@ -92,7 +92,7 @@ To get a local copy up and running follow these simple steps.
 
 ## It will list the gRPC service in the project
 
-![grpc](https://user-images.githubusercontent.com/68476971/191175281-2816f882-a3a4-46f7-ab70-0bb55266873f.png)
+![grpcurl](https://user-images.githubusercontent.com/68476971/191187897-e981e48f-fcb2-4f9d-a98a-b9ff5bfcbdb2.png)
 
 ## The "list" verb also lets us see all methods in a particular service:
 
@@ -105,16 +105,16 @@ To get a local copy up and running follow these simple steps.
 ```
   grpcurl -plaintext localhost:50051 describe grpc.GetLatestBlockService.GetLatestBlock
   ```
-![Screenshot (32)](https://user-images.githubusercontent.com/68476971/191179130-c90a9943-7ada-4224-96cb-d68ea96e0c96.png)
+![GETlATESTbLOCK](https://user-images.githubusercontent.com/68476971/191179130-c90a9943-7ada-4224-96cb-d68ea96e0c96.png)
 
 ## Invoking gRPC
 
-### Invoking an RPC on a trusted server (e.g. TLS without self-signed key or custom CA) that requires no client certs and supports server reflection is the simplest thing to do with grpcurl. This minimal invocation sends an empty request body:
+Invoking an RPC on a trusted server (e.g. TLS without self-signed key or custom CA) that requires no client certs and supports server reflection is the simplest thing to do with grpcurl. This minimal invocation sends an empty request body:
 
 ```
   grpcurl -plaintext localhost:50051 grpc.GetLatestBlockService.GetLatestBlock
   ```
-![Screenshot (30)](https://user-images.githubusercontent.com/68476971/191177329-a52f60bf-54af-40c4-9e1a-c933b6666eb9.png)
+![invoke gRPC](https://user-images.githubusercontent.com/68476971/191177329-a52f60bf-54af-40c4-9e1a-c933b6666eb9.png)
 
 <!--Testing-->
 ## Testing
