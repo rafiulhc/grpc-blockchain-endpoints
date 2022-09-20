@@ -61,9 +61,10 @@ To get a local copy up and running follow these simple steps.
 ## Run local server
 
 ```
+   MAC or Linux
   ./bin/grpc/server
 
-  for windows user
+  for windows
 
   ./bin/grpc/server.exe
   ```
@@ -71,9 +72,10 @@ To get a local copy up and running follow these simple steps.
 ## make request from client to get block data
 
 ```
+  MAC or Linux
   ./bin/grpc/client
 
-  for windows user
+  for windows
 
   ./bin/grpc/client.exe
   ```
