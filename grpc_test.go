@@ -19,7 +19,7 @@ import (
 
 var addr string = "0.0.0.0:50051"
 
-// Response is the struct response from the blockchain API
+// Response is the struct response from the blockchain endpoint
 type Response struct {
     JSONRPC       string `json:"jsonrpc"`
     ID            int    `json:"id"`
@@ -35,8 +35,8 @@ type Response struct {
 }
 
 
-// newLatestBlock is a function that calls the GRPC server and returns the latest block for testing
-func newLatestBlock(client pb.GetLatestBlockServiceClient) (result *pb.GetLatestBlockResponse) {
+// newLatestBlock is a request function that calls the GRPC server and returns the latest block for testing
+func newLatestBlock(client pb.GetLatestBlockServiceClient) (*pb.GetLatestBlockResponse) {
 
 	// variable to store the response
 	stream, err := client.GetLatestBlock(context.Background(), &pb.GetLatestBlockRequest{})
@@ -45,16 +45,16 @@ func newLatestBlock(client pb.GetLatestBlockServiceClient) (result *pb.GetLatest
 	}
 
 	// read the response from the stream
-	res, err := stream.Recv()
+	response, err := stream.Recv()
 
 	if err != nil {
 			status.Error(
 				codes.Unknown,
-				fmt.Sprintf("failed to receive a block : %v", err),
+				fmt.Sprintf("failed to receive a block response: %v", err),
 			)
 	}
 
-	return res
+	return response
 
 }
 
