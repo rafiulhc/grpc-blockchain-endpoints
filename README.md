@@ -55,27 +55,27 @@ To get a local copy up and running follow these simple steps.
 ## To get executable binaries, please open a terminal under project directory and run
 
 ```
-  make grpc
+make grpc
   ```
 
 ## Run local server
 
 ```
-   MAC or Linux
-  ./bin/grpc/server
+MAC or Linux
+./bin/grpc/server
 
-  for windows
-  ./bin/grpc/server.exe
+for windows
+./bin/grpc/server.exe
   ```
 
 ## Make request from client to get block data
 
 ```
-  MAC or Linux
-  ./bin/grpc/client
+MAC or Linux
+./bin/grpc/client
 
-  for windows
-  ./bin/grpc/client.exe
+for windows
+./bin/grpc/client.exe
   ```
 
 ## Response from server with 5 block data and created a JSON file with Block height and Hash
