@@ -35,7 +35,7 @@ send requests through the gRPC protocol with  requirements</h3>
 
 
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 
@@ -53,7 +53,7 @@ To get a local copy up and running follow these simple steps.
    ```
 2. Install required packages mentioned above
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 ## To get executable binaries
@@ -62,6 +62,35 @@ To get a local copy up and running follow these simple steps.
   make grpc
   ```
 
+```
+  ./bin/grpc/server
+
+  for windows user
+
+  ./bin/grpc/server.exe
+  ```
+
+```
+  ./bin/grpc/client
+
+  for windows user
+
+  ./bin/grpc/client.exe
+  ```
+![Screenshot (28)](https://user-images.githubusercontent.com/68476971/191175281-2816f882-a3a4-46f7-ab70-0bb55266873f.png)
+
+```
+  make grpc
+  ```
+
+
+```
+  make grpc
+  ```
+
+```
+  make grpc
+  ```
 
 ![Secret Variables](https://user-images.githubusercontent.com/68476971/169951589-da24b489-0cb6-44f8-a1fb-f9f02afca154.png)
 
@@ -80,7 +109,7 @@ After running the command in terminal if block from gRPC call and direct API cal
 ![Tests](https://user-images.githubusercontent.com/68476971/191172357-e5e74903-196b-4c7d-9652-fe52ef8c8a92.png)
 
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 
@@ -90,7 +119,7 @@ After running the command in terminal if block from gRPC call and direct API cal
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 
@@ -99,7 +128,7 @@ After running the command in terminal if block from gRPC call and direct API cal
 
 None
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 
