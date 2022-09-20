@@ -87,7 +87,7 @@ To get a local copy up and running follow these simple steps.
 ## To list all services exposed by a server, use the "list" verb.
 
 ```
-  grpcurl -plaintext localhost:50051 list
+grpcurl -plaintext localhost:50051 list
   ```
 
 ## It will list the gRPC service in the project
@@ -97,13 +97,13 @@ To get a local copy up and running follow these simple steps.
 ## The "list" verb also lets us see all methods in a particular service:
 
 ```
-  grpcurl -plaintext localhost:50051 list grpc.GetLatestBlockService
+grpcurl -plaintext localhost:50051 list grpc.GetLatestBlockService
   ```
 
 ## Describe with
 
 ```
-  grpcurl -plaintext localhost:50051 describe grpc.GetLatestBlockService.GetLatestBlock
+grpcurl -plaintext localhost:50051 describe grpc.GetLatestBlockService.GetLatestBlock
   ```
 ![GETlATESTbLOCK](https://user-images.githubusercontent.com/68476971/191179130-c90a9943-7ada-4224-96cb-d68ea96e0c96.png)
 
@@ -112,7 +112,7 @@ To get a local copy up and running follow these simple steps.
 Invoking an RPC on a trusted server (e.g. TLS without self-signed key or custom CA) that requires no client certs and supports server reflection is the simplest thing to do with grpcurl. This minimal invocation sends an empty request body:
 
 ```
-  grpcurl -plaintext localhost:50051 grpc.GetLatestBlockService.GetLatestBlock
+grpcurl -plaintext localhost:50051 grpc.GetLatestBlockService.GetLatestBlock
   ```
 ![invoke gRPC](https://user-images.githubusercontent.com/68476971/191177329-a52f60bf-54af-40c4-9e1a-c933b6666eb9.png)
 
