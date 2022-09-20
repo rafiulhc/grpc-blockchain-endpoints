@@ -45,7 +45,7 @@ To get a local copy up and running follow these simple steps.
 
 1. Clone the repo
 ```sh
-   git clone https://github.com/rafiulhc/grpc-blockchain-endpoints.git
+git clone https://github.com/rafiulhc/grpc-blockchain-endpoints.git
 ```
 2. Install required packages mentioned above
 
