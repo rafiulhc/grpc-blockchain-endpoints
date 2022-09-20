@@ -24,7 +24,7 @@ send requests through the gRPC protocol with  requirements</h3>
 
 
 
-### Built With versions
+## Built With versions
 
 * go version go1.18.3
 * gRPC
@@ -35,12 +35,8 @@ send requests through the gRPC protocol with  requirements</h3>
 
 
 
-
-
-
-
 <!-- GETTING STARTED -->
-## Getting Started
+# Getting Started
 
 To get a local copy up and running follow these simple steps.
 
@@ -56,12 +52,14 @@ To get a local copy up and running follow these simple steps.
 
 
 
-## To get executable binaries
+# To get executable binaries
 
 ```
   make grpc
   ```
-## Run local server
+
+# Run local server
+
 ```
   ./bin/grpc/server
 
@@ -70,8 +68,8 @@ To get a local copy up and running follow these simple steps.
   ./bin/grpc/server.exe
   ```
 
-## Run below command to make a request from client to get block data
-# It will
+# make request from client to get block data
+
 ```
   ./bin/grpc/client
 
@@ -80,41 +78,46 @@ To get a local copy up and running follow these simple steps.
   ./bin/grpc/client.exe
   ```
 
-## It will get response from server with 5 block data and will create a JSON file will Block height and Hash
+# response from server with 5 block data and created a JSON file with Block height and Hash
+
 ![grpc](https://user-images.githubusercontent.com/68476971/191175281-2816f882-a3a4-46f7-ab70-0bb55266873f.png)
 
-## Frpm CLI using grpcurl
+## From CLI using grpcurl
 
-## To list all services exposed by a server, use the "list" verb.
+# To list all services exposed by a server, use the "list" verb.
 
 ```
   grpcurl -plaintext localhost:50051 list
   ```
+
 # It will list the gRPC service in the project
 
 ![grpc](https://user-images.githubusercontent.com/68476971/191175281-2816f882-a3a4-46f7-ab70-0bb55266873f.png)
 
-## The "list" verb also lets us see all methods in a particular service:
+# The "list" verb also lets us see all methods in a particular service:
 
 ```
   grpcurl -plaintext localhost:50051 list grpc.GetLatestBlockService
   ```
-## Describe with --
+
+# Describe with
+
 ```
   grpcurl -plaintext localhost:50051 describe grpc.GetLatestBlockService.GetLatestBlock
   ```
 ![Secret Variables](https://user-images.githubusercontent.com/68476971/169951589-da24b489-0cb6-44f8-a1fb-f9f02afca154.png)
 
-## Invoking gRPC
+# Invoking gRPC
 
 # Invoking an RPC on a trusted server (e.g. TLS without self-signed key or custom CA) that requires no client certs and supports server reflection is the simplest thing to do with grpcurl. This minimal invocation sends an empty request body:
+
 ```
   grpcurl -plaintext localhost:50051 grpc.GetLatestBlockService.GetLatestBlock
   ```
 ![Screenshot (30)](https://user-images.githubusercontent.com/68476971/191177329-a52f60bf-54af-40c4-9e1a-c933b6666eb9.png)
 
 <!--Testing-->
-## Testing
+# Testing
 
   ```
   go test
