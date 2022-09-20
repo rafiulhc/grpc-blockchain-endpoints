@@ -44,9 +44,9 @@ To get a local copy up and running follow these simple steps.
 
 
 1. Clone the repo
-   ```sh
+```sh
    git clone https://github.com/rafiulhc/grpc-blockchain-endpoints.git
-   ```
+```
 2. Install required packages mentioned above
 
 
@@ -105,7 +105,7 @@ To get a local copy up and running follow these simple steps.
 ```
   grpcurl -plaintext localhost:50051 describe grpc.GetLatestBlockService.GetLatestBlock
   ```
-![Secret Variables](https://user-images.githubusercontent.com/68476971/169951589-da24b489-0cb6-44f8-a1fb-f9f02afca154.png)
+![Screenshot (32)](https://user-images.githubusercontent.com/68476971/191179130-c90a9943-7ada-4224-96cb-d68ea96e0c96.png)
 
 ## Invoking gRPC
 
@@ -119,9 +119,9 @@ To get a local copy up and running follow these simple steps.
 <!--Testing-->
 ## Testing
 
-  ```
+```
   go test
-  ```
+```
 
 
 After running the command in terminal if block from gRPC call and direct API call match, should show the tests results....
@@ -131,25 +131,10 @@ After running the command in terminal if block from gRPC call and direct API cal
 
 
 
-
-
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-
-
-
 <!-- LICENSE -->
 ## License
 
 None
-
-
 
 
 
