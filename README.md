@@ -65,22 +65,20 @@ To get a local copy up and running follow these simple steps.
   ./bin/grpc/server
 
   for windows
-
   ./bin/grpc/server.exe
   ```
 
-## make request from client to get block data
+## Make request from client to get block data
 
 ```
   MAC or Linux
   ./bin/grpc/client
 
   for windows
-
   ./bin/grpc/client.exe
   ```
 
-## response from server with 5 block data and created a JSON file with Block height and Hash
+## Response from server with 5 block data and created a JSON file with Block height and Hash
 
 ![grpc](https://user-images.githubusercontent.com/68476971/191175281-2816f882-a3a4-46f7-ab70-0bb55266873f.png)
 
