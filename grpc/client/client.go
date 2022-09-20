@@ -12,13 +12,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-
-
+// struct that contains the block height and hash to be written to the json file
 type Block struct {
 	Height string `json:"height"`
 	Hash string   `json:"hash"`
 }
 
+// helper function to check if the file exists for appending the new block data
 func checkFile(filename string) error {
     _, err := os.Stat(filename)
     if os.IsNotExist(err) {
@@ -31,16 +31,18 @@ func checkFile(filename string) error {
 }
 
 
-
+// client call to the grpc server to get the latest block
 func CallLatestBlock(client pb.GetLatestBlockServiceClient) {
 
-		println("callBlock client called")
+		println("GetLatestBlock client called")
 		stream, err := client.GetLatestBlock(context.Background(), &pb.GetLatestBlockRequest{})
 		if err != nil {
-			log.Fatalf("Error while calling Block RPC: %v", err)
+			log.Fatalf("Error while calling RPC: %v", err)
 		}
+
+		// for loop to iterate over response from the grpc server streaming
 		for {
-			res, err := stream.Recv()
+			response, err := stream.Recv()
 			if err == io.EOF {
 				// we've reached the end of the stream
 				break
@@ -50,6 +52,7 @@ func CallLatestBlock(client pb.GetLatestBlockServiceClient) {
 			}
 
 			filename := "state.json"
+			// check if the file exists by calling the helper function
 			err = checkFile(filename)
 			if err != nil {
 				logrus.Error(err)
@@ -61,28 +64,30 @@ func CallLatestBlock(client pb.GetLatestBlockServiceClient) {
 			}
 
 			dataBlock := &Block{
-				Height: res.BlockId,
-				Hash: res.Block,
+				Height: response.BlockId,
+				Hash: response.Block,
 			}
 
-			data := []Block{}
+			//
+			blockArray := []Block{}
 
-			// Here the magic happens!
-			json.Unmarshal(file, &data)
-
-			data = append(data, *dataBlock)
+			// unmarshal the json file to get the previous block height and hash
+			json.Unmarshal(file, &blockArray)
+			// append the new block height and hash to the json file
+			blockArray = append(blockArray, *dataBlock)
 
 			// Preparing the data to be marshalled and written.
-			dataBytes, err := json.Marshal(data)
+			dataBytes, err := json.Marshal(blockArray)
 			if err != nil {
 				logrus.Error(err)
 			}
 
+			// write the all existing blocks height and hash to the json file
 			err = ioutil.WriteFile(filename, dataBytes, 0644)
 			if err != nil {
 				logrus.Error(err)
 			}
-			log.Printf("Response from Block: %v", dataBlock)
+			println("Response from Block: %v", "BlockHash:", response.Block, "Block height:", response.BlockId)
 	}
 
 }

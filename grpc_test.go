@@ -17,9 +17,9 @@ import (
 	"google.golang.org/grpc/status"               // for error handling status
 )
 
-var addr string = "0.0.0.0:50051"
+var portAddress string = "0.0.0.0:50051"
 
-// Response is the struct response from the blockchain endpoint
+// Response struct to store response from the blockchain endpoint
 type Response struct {
     JSONRPC       string `json:"jsonrpc"`
     ID            int    `json:"id"`
@@ -35,7 +35,7 @@ type Response struct {
 }
 
 
-// newLatestBlock is a request function that calls the GRPC server and returns the latest block for testing
+// request function that calls the GRPC server and returns the latest block for testing
 func newLatestBlock(client pb.GetLatestBlockServiceClient) (*pb.GetLatestBlockResponse) {
 
 	// variable to store the response
@@ -44,7 +44,7 @@ func newLatestBlock(client pb.GetLatestBlockServiceClient) (*pb.GetLatestBlockRe
 		log.Fatalf("Error while calling Block RPC: %v", err)
 	}
 
-	// read the response from the stream
+	// response from the grpc server streaming
 	response, err := stream.Recv()
 
 	if err != nil {
@@ -58,9 +58,9 @@ func newLatestBlock(client pb.GetLatestBlockServiceClient) (*pb.GetLatestBlockRe
 
 }
 
-// TestGetLatestBlock is a test function that tests the GRPC server response with the blockchain API response
+// tester function, compare the GRPC server response with the osmosis blockchain endpoint response
 func TestCallLatestBlock(t *testing.T){
-	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	connection, err := grpc.Dial(portAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		status.Error(
@@ -69,15 +69,15 @@ func TestCallLatestBlock(t *testing.T){
 		)
 	}
 
-	defer conn.Close()
+	defer connection.Close()
 
-	client := pb.NewGetLatestBlockServiceClient(conn)
-	result  := newLatestBlock(client)
-	println(result.Block)
+	client := pb.NewGetLatestBlockServiceClient(connection)
+	resultFromGRPC  := newLatestBlock(client)
+	println("Block hash:", resultFromGRPC.Block)
 
-	// Call the blockchain endpoint
+	// Call the osmosis/blockchain endpoint
 	rpcURL := "https://rpc.osmosis.zone/abci_info?"
-	response, err := http.Get(rpcURL)
+	responseFromBlockchain, err := http.Get(rpcURL)
 
 	if err != nil {
 		status.Error(
@@ -87,7 +87,7 @@ func TestCallLatestBlock(t *testing.T){
 	}
 
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := ioutil.ReadAll(responseFromBlockchain.Body)
 	if err != nil {
 		status.Error(
 			codes.Internal,
@@ -105,7 +105,7 @@ func TestCallLatestBlock(t *testing.T){
 		)
 	}
 
-	responseBlockHashByGRPCRequest := result.Block
+	responseBlockHashByGRPCRequest := resultFromGRPC.Block
 	responseBlockHashByBlockChainAPIRequest := responseObject.Result.Response.LastBlockAppHash
 
 	// check if the response from the blockchain API and the response from the GRPC request are the same

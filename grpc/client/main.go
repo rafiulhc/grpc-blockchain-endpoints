@@ -8,19 +8,21 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var addr string = "localhost:50051"
+//
+var portAddress string = "localhost:50051"
 
 func main() {
-
-	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// connection to the server with insecure credentials for simplicity
+	connection, err := grpc.Dial(portAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		log.Fatalf("failed to connect: %v\n", err)
 	}
 
-	defer conn.Close()
+	defer connection.Close()
 
-	client := pb.NewGetLatestBlockServiceClient(conn)
+	// create a client to the server with the connection
+	client := pb.NewGetLatestBlockServiceClient(connection)
 
 	// call gRPC client to get latest block
 	CallLatestBlock(client)

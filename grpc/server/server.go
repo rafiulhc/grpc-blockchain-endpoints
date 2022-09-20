@@ -12,6 +12,7 @@ import (
 	pb "github.com/rafiulhc/grpc-blockchain-endpoints/grpc/proto"
 )
 
+// struct that contains the block height and hash to be written to the json file
 type Response struct {
     JSONRPC       string `json:"jsonrpc"`
     ID            int    `json:"id"`
@@ -26,12 +27,13 @@ type Response struct {
     } `json:"result"`
 }
 
-
+// server call to the osmosis rpc to get the latest block
 func (s *Server) GetLatestBlock(req *pb.GetLatestBlockRequest, stream pb.GetLatestBlockService_GetLatestBlockServer) error{
-		println("Block stream called")
+		println("GetLatestBlockService stream called")
 
 		rpcURL := "https://rpc.osmosis.zone/abci_info?"
 
+		// iterate through the rpc url to get the latest block for 5 times
 		for i:=0; i<5; i++{
 			response, err := http.Get(rpcURL)
 
@@ -40,27 +42,28 @@ func (s *Server) GetLatestBlock(req *pb.GetLatestBlockRequest, stream pb.GetLate
 				os.Exit(1)
 			}
 
-
+			// read the response body
 			body, err := ioutil.ReadAll(response.Body)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			var responseObject Response
-
 			if err := json.Unmarshal(body, &responseObject); err != nil {   // Parse []byte to go struct pointer
-				fmt.Println("Can not unmarshal JSON")
+				fmt.Println("Can't unmarshal JSON")
 			}
 
-			res := &pb.GetLatestBlockResponse{
+			// get the block height and hash from the response body and send it to the client
+			result := &pb.GetLatestBlockResponse{
 				BlockId: responseObject.Result.Response.LastBlockHeight,
 				Block:  responseObject.Result.Response.LastBlockAppHash,
 			}
-
-			stream.Send(res)
-
+			// send the response to the client as a stream
+			stream.Send(result)
+			// sleep for 6 seconds as osmosis block execution time is approx. 6 seconds
 			time.Sleep(6 * time.Second)
 		}
+
 		return nil
 	}
 

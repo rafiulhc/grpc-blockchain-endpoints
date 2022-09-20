@@ -9,25 +9,30 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var addr string = "0.0.0.0:50051"
+var portAddress string = "0.0.0.0:50051"
 
+// struct type of the server that implements the GetLatestBlockServiceServer interface
 type Server struct{
 	pb.GetLatestBlockServiceServer
 }
 
 func main() {
-	lis, err := net.Listen("tcp", addr)
+	// listener on the port
+	listen, err := net.Listen("tcp", portAddress)
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v\n", err)
 	}
-	log.Printf("Server is listening on %s\n", addr)
+	log.Printf("Server is listening on %s\n", portAddress)
 
-	s := grpc.NewServer()
-	pb.RegisterGetLatestBlockServiceServer(s, &Server{})
-	reflection.Register(s)
+	// gRPC server
+	server := grpc.NewServer()
+	// register the server to the GetLatestBlockServiceServer interface
+	pb.RegisterGetLatestBlockServiceServer(server, &Server{})
+	// register reflection service on gRPC server calling from CLI by grpcurl
+	reflection.Register(server)
 
-	if err := s.Serve(lis); err != nil {
+	if err := server.Serve(listen); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }

@@ -1,20 +1,9 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
 
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
 *** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
@@ -26,7 +15,8 @@
 <div align="center">
 
 
-  <h3 align="center">Front-running and malicious node/validator resistant smart contract, written in Solidity to register vanity names/domains on EVM Blockchains</h3>
+  <h3 align="center">A gRPC server and client (server streaming) that will listen and
+send requests through the gRPC protocol with  requirements</h3>
 
 
 </div>
@@ -169,28 +159,19 @@ Change the secret variables as process.env.SECRET_KEY and process.env.ALCHEMY pr
 <!--Testing-->
 ## Testing
 
-  ```npm install
-  npx hardhat compile
-  npx hardhat run --network localhost scripts/deploy.js
-  npx hardhat test
+  ```go test
   ```
 
 
-After running the commands in terminal should show the tests results....
+After running the commands in terminal if block from gRPC call and direct API call match, should show the tests results....
 
 
-![Tests](https://user-images.githubusercontent.com/68476971/169960734-8bad34dc-93ca-40b8-843d-e8e48992d94a.png)
+![Tests](https://user-images.githubusercontent.com/68476971/191172357-e5e74903-196b-4c7d-9652-fe52ef8c8a92.png)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- CONTRIBUTING -->
-## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -216,8 +197,8 @@ None
 
 Rafiul Hasan - [Linkedin](https://www.linkedin.com/in/hrafiul/)
                [Twitter](https://twitter.com/r_hasan_c)
-               - rafiulhasan86@gmail.com
+               - rafiul.hasan.chowdhury@gmail.com
 
-Project Link: [https://github.com/rafiul86/Name-Registry-Smart-Contract](https://github.com/rafiul86/Name-Registry-Smart-Contract)
+Project Link: [https://github.com/rafiulhc/grpc-blockchain-endpoints](https://github.com/rafiulhc/grpc-blockchain-endpoints)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
