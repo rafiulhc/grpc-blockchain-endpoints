@@ -111,7 +111,7 @@ To get a local copy up and running follow these simple steps.
 ```
   grpcurl -plaintext localhost:50051 grpc.GetLatestBlockService.GetLatestBlock
   ```
-![Secret Variables](https://user-images.githubusercontent.com/68476971/169951589-da24b489-0cb6-44f8-a1fb-f9f02afca154.png)
+![Screenshot (30)](https://user-images.githubusercontent.com/68476971/191177329-a52f60bf-54af-40c4-9e1a-c933b6666eb9.png)
 
 <!--Testing-->
 ## Testing
