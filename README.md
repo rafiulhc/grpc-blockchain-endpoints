@@ -26,7 +26,7 @@ send requests through the gRPC protocol with  requirements</h3>
 
 ## Built With versions
 
-* go version go1.18.3
+* go1.18.3
 * gRPC
 * Protocol Buffer : libprotoc 3.21.1
 * grpcurl.exe dev build
